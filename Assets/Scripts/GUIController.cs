@@ -53,7 +53,6 @@ public class GUIController : MonoBehaviour
 
     public void IncrementChargeUI()
     {
-        Debug.Log("CALLED");
         ChargeBar.gameObject.GetComponent<Image>().fillAmount += .1f;
     }
 

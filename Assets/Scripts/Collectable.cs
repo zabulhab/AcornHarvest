@@ -22,19 +22,16 @@ public class Collectable : MonoBehaviour
     {
         if (other.GetComponent<CharacterMovement>() != null)
         {
-            Debug.Log("GOT A POINT");
 			scoreTracker.AddPoints(1);
             soundPlayer.PlayRandomCollectSound();
             Disappear();
         }
         else if (other.GetComponentInParent<CollectAllPower>() != null)
         {
-            Debug.Log("Collected By Power");
             scoreTracker.AddPoints(1);
             // sound played by collectallpower script
             Disappear();
         }
-        Debug.Log(other);
     }
 
     /// <summary>

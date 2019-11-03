@@ -34,7 +34,6 @@ public class CollectAllPower : MonoBehaviour
         {
             currentlyConsuming = false;
             transform.GetChild(0).gameObject.SetActive(false);
-            Debug.Log("STOP CONSUMETH");
             guiController.HideFullChargeText();
             guiController.DepleteChargeUI();
         }
@@ -46,7 +45,6 @@ public class CollectAllPower : MonoBehaviour
 
     private void ConsumeAllOnScreen()
     {
-        Debug.Log("CONSUMETH");
         currentlyConsuming = true;
         transform.GetChild(0).gameObject.SetActive(true);
         charge = 0;
