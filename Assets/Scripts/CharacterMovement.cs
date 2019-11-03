@@ -9,8 +9,6 @@ public class CharacterMovement : MonoBehaviour
 
     private float speed;
 
-    [HideInInspector]
-    public bool grounded = true; // can be changed from GroundedChecker
     [SerializeField]
     private Animation jumpAnim;
     [SerializeField]

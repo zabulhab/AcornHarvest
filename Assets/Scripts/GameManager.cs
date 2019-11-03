@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Pause pause;
 
+    [HideInInspector]
     public bool IsGameOver;
 
     [SerializeField]
