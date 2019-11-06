@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Collectable : MonoBehaviour
+public class BadCollectable : MonoBehaviour
 {
-	private int scoreValue;
+    private int scoreValue;
     private ScoreTracker scoreTracker;
     private SoundPlayer soundPlayer;
 
@@ -13,20 +13,19 @@ public class Collectable : MonoBehaviour
         // find ref on spawn
         scoreTracker = FindObjectOfType<ScoreTracker>();
         soundPlayer = FindObjectOfType<SoundPlayer>();
-        GameManager.Instance.IncrementTotalSpawned();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.GetComponent<CharacterMovement>() != null)
         {
-			scoreTracker.AddPoints(1);
-            soundPlayer.PlayRandomCollectSound();
+            soundPlayer.PlayExplosionSound();
+            scoreTracker.AddBomb();
             Disappear();
+
         }
         else if (other.GetComponentInParent<CollectAllPower>() != null)
         {
-            scoreTracker.AddPoints(1);
             // sound played by collectallpower script
             Disappear();
         }
@@ -38,16 +37,6 @@ public class Collectable : MonoBehaviour
     [HideInInspector]
     public void Disappear()
     {
-        Debug.Log(gameObject.transform.parent.name);
-        // if this is the last collectable, destroy whole set prefab
-        if (gameObject.transform.parent.childCount == 1) 
-        {
-            Debug.Log("should destroy parent");
-            Destroy(gameObject.transform.parent.gameObject);
-        }
-        else // destroy just this collectable
-        {
-            Destroy(gameObject);
-        }
+       Destroy(gameObject);
     }
 }

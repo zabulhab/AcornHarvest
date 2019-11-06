@@ -11,8 +11,7 @@ public class Falling : MonoBehaviour
     void Awake()
     {
         // check the GameManager for the current fall speed
-        gameManager = FindObjectOfType<GameManager>();
-        fallSpeed = gameManager.CurrentFallSpeed;
+        fallSpeed = GameManager.Instance.CurrentFallSpeed;
     }
 
     // Update is called once per frame

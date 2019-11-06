@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Events;
 
 /// <summary>
 /// I don't think I'm using this right
@@ -29,12 +30,51 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PopupMessage popupMessagePower;
 
-    private int totalSpawnedObjects;
+    [HideInInspector]
+    public int totalSpawnedObjects;
     public float CurrentFallSpeed { get; set; }
     private readonly float MAX_FALL_SPEED = -20;
 
+    /// <summary>
+    /// True if popup messages have been shown once since opening the game.
+    /// Set to true after the last message has disappeared.
+    /// </summary>
+    public bool popupMessagesAlreadyShown;
+
+
+    [System.Serializable]
+    public class GameManagerEvents
+    {
+        [Tooltip("Invoked when the game has ended")]
+        public UnityEvent OnGameOver;
+    }
+
+    public GameManagerEvents events;
+
+    public static GameManagerEvents Events { get { return instance.events; } }
+
+    // Variables for the Singleton instance of this Game Manager.
+    private static GameManager instance;
+    public static GameManager Instance { get { return instance; } }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        IsGameOver = false;
+        paused = false;
+        totalSpawnedObjects = 0;
+    }
+
     private void Awake()
     {
+        if (instance != null && instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
         CurrentFallSpeed = -5;
     }
 
@@ -54,18 +94,12 @@ public class GameManager : MonoBehaviour
         CurrentFallSpeed -= .5f;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        IsGameOver = false;
-        paused = false;
-        totalSpawnedObjects = 0;
-    }
-
     public void Restart()
     {
         IsGameOver = false;
         paused = false;
+        totalSpawnedObjects = 0;
+        pause.UnpauseGame();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -74,11 +108,14 @@ public class GameManager : MonoBehaviour
         paused = false;
         IsGameOver = false;
         pause.UnpauseGame();
+        totalSpawnedObjects = 0;
         SceneManager.LoadScene(0);
     }
 
     public void GameOver()
     {
+        totalSpawnedObjects = 0;
+        events.OnGameOver.Invoke();
         IsGameOver = true;
         guiController.ShowGameOverMenu();
         popupMessageRun.HideMessage();

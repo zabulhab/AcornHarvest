@@ -14,9 +14,14 @@ public class ScoreTracker : MonoBehaviour
     [SerializeField]
     private GameObject finalScoreText;
     [SerializeField]
+    private GameObject finalMissText;
+    [SerializeField]
+    private GameObject finalComboText;
+    [SerializeField]
     private Pause pause;
-    // Outside canvas prefab so can't be dropped in, must find during runtime
-    private GameManager gameManager;
+
+    [SerializeField]
+    private ComboCounter comboCounter;
 
     private int Missed;
 
@@ -29,16 +34,16 @@ public class ScoreTracker : MonoBehaviour
     [SerializeField]
     private PopupMessage popupMessagePower;
 
-    private void Start()
-    {
-        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
-    }
-
     [HideInInspector]
     public void AddPoints(int points)
     {
         score += points;
         guiController.UpdateScoreText(score);
+        comboCounter.IncrementComboCount();
+        if (GameManager.Instance.popupMessagesAlreadyShown)
+        {
+            return;
+        }
         if (score == 10)
         {
             popupMessageRun.ShowMessage();
@@ -53,16 +58,42 @@ public class ScoreTracker : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when the player fails to catch an acorn
+    /// </summary>
     public void AddMissed()
     {
         Missed += 1;
         healthBarUI.DepleteHealth();
+        comboCounter.BreakCombo();
         if (Missed == MAXED_ALLOWED_MISSES)
         {
+            GameManager.Instance.GameOver();
             finalScoreText.GetComponent<Text>().text = "x " + score;
-
-            gameManager.GameOver();
+            finalMissText.GetComponent<Text>().text = "x " + Missed;
+            finalComboText.GetComponent<Text>().text = "x " + comboCounter.HighestComboOfRound;
         }
+    }
+
+    /// <summary>
+    /// Called when the player catches a bomb
+    /// Right now, it counts as two misses, takes 5 collected acorns from your total,
+    /// and breaks your combo streak
+    /// </summary>
+    public void AddBomb()
+    {
+        AddMissed();
+        AddMissed();
+        guiController.UpdateScoreText(score);
+        if (score < 5)
+        {
+            score = 0;
+        }
+        else
+        {
+            score -= 5;
+        }
+        // explode some collected acorns??
     }
 
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class SoundPlayer : MonoBehaviour
@@ -11,13 +10,9 @@ public class SoundPlayer : MonoBehaviour
     [SerializeField]
     private AudioSource PowerSound;
     [SerializeField]
+    private AudioSource ExplosionSound;
+    [SerializeField]
     private List<AudioSource> allCollectSFXs;
-
-    //list of sfx
-    // random one
-    //powerup audio
-    // game over audio
-    // hurt audio??
 
     public void PlayRandomCollectSound()
     {
@@ -33,6 +28,11 @@ public class SoundPlayer : MonoBehaviour
     public void PlayPowerSound()
     {
         PowerSound.Play();
+    }
+
+    public void PlayExplosionSound()
+    {
+        ExplosionSound.Play();
     }
 
 }

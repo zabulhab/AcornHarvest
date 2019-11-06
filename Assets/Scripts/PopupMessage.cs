@@ -10,7 +10,12 @@ public class PopupMessage : MonoBehaviour
     [SerializeField]
     private GameObject bg;
 
-    private bool showing = false;
+    /// <summary>
+    /// If this message is the last, it should tell the game manager when it finishes
+    /// displaying so we know that the user has seen all of the messages once.
+    /// </summary>
+    public bool IsLastMessage;
+
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +28,6 @@ public class PopupMessage : MonoBehaviour
 
     public void ShowMessage()
     {
-        showing = true;
         text.gameObject.SetActive(true);
         bg.gameObject.SetActive(true);
 
@@ -38,9 +42,13 @@ public class PopupMessage : MonoBehaviour
     [HideInInspector]
     public void HideMessage()
     {
-        showing = false;
         text.gameObject.SetActive(false);
         bg.gameObject.SetActive(false);
+        if (IsLastMessage)
+        {
+            Debug.Log("SET TRUE");
+            GameManager.Instance.popupMessagesAlreadyShown = true;
+        }
     }
 
     /// <summary>
@@ -49,9 +57,7 @@ public class PopupMessage : MonoBehaviour
     /// <returns>The image.</returns>
     private IEnumerator KeepPopupShowing()
     {
-        print(Time.time);
         yield return new WaitForSecondsRealtime(Length);
-        print(Time.time);
         HideMessage();
     }
 

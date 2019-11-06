@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class CollectAllPower : MonoBehaviour
 {
-    private bool currentlyConsuming = false;
+    private bool currentlyConsuming;
     private int charge;
     [SerializeField]
     private GUIController guiController;

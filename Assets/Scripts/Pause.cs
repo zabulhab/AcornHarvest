@@ -16,12 +16,12 @@ public class Pause : MonoBehaviour
     {
         if (Input.GetKeyDown("enter") || Input.GetKeyDown("return"))
         {
-            if (gameManager.paused == false && !gameManager.IsGameOver)
+            if (GameManager.Instance.paused == false && !GameManager.Instance.IsGameOver)
             {
                 PauseGame();
                 guiController.ShowPauseMenu();
             }
-            else if (gameManager.paused == true && !gameManager.IsGameOver)
+            else if (GameManager.Instance.paused == true && !GameManager.Instance.IsGameOver)
             {
                 UnpauseGame();
                 guiController.HidePauseMenu();
@@ -34,12 +34,12 @@ public class Pause : MonoBehaviour
     {
         Debug.Log("Y");
         Time.timeScale = 0f;
-        gameManager.paused = true;
+        GameManager.Instance.paused = true;
     }
 
     public void UnpauseGame()
     {
         Time.timeScale = 1f;
-        gameManager.paused = false;
+        GameManager.Instance.paused = false;
     }
 }
